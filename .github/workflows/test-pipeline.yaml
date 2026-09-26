@@ -25,7 +25,7 @@ jobs:
           echo "ADMIN_SENHA=${{ secrets.ADMIN_SENHA }}" >> .env
 
       - name: Instalar dependências
-        run: npm ci
+        run: npm install
 
       - name: Iniciar servidor backend
         run: npm start &
@@ -34,14 +34,16 @@ jobs:
         run: npx wait-on http://localhost:3000 --timeout 30000
 
       - name: Executar testes
-        run: npm test -- --reporter json > test-results.json
+        run: npm test -- --reporter mocha-junit-reporter
+        env:
+          MOCHA_FILE: test-results.xml
         continue-on-error: true
 
       - name: Publicar resultados de testes
         uses: dorny/test-reporter@v1
         if: always()
         with:
-          name: Test Results
-          path: test-results.json
-          reporter: mocha-json
+          name: Resultados dos Testes
+          path: test-results.xml
+          reporter: java-junit
           fail-on-error: false
