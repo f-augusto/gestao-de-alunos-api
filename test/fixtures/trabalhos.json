@@ -1,0 +1,98 @@
+[
+  {
+    "testTitle": "Deve ser possível entregar um trabalho quando todos os dados enviados são válidos",
+    "dadosAluno": {
+      "nome": "João Silva",
+      "email": "joao.silva@example.com",
+      "matricula": "202401001",
+      "senha": "senha123"
+    },
+    "disciplinaIdMatricula": "disciplina-programacao-web",
+    "dadosTrabalho": {
+      "disciplinaId": "disciplina-programacao-web",
+      "titulo": "Lista de Exercícios",
+      "descricao": "Resolução dos exercícios de programação WEB"
+    },
+    "statusCodeEsperado": 201,
+    "respostaTrabalho": {
+      "disciplinaId": "disciplina-programacao-web",
+      "titulo": "Lista de Exercícios",
+      "descricao": "Resolução dos exercícios de programação WEB",
+      "status": "entregue"
+    }
+  },
+  {
+    "testTitle": "Deve validar erro ao registrar trabalho sem título",
+    "dadosAluno": {
+      "nome": "Maria Santos",
+      "email": "maria.santos@example.com",
+      "matricula": "202401002",
+      "senha": "senha456"
+    },
+    "disciplinaIdMatricula": "disciplina-matematica",
+    "dadosTrabalho": {
+      "disciplinaId": "disciplina-matematica",
+      "descricao": "Trabalho sem título"
+    },
+    "statusCodeEsperado": 400,
+    "respostaTrabalho": {
+      "error": "Os campos \"disciplinaId\" e \"titulo\" são obrigatórios."
+    }
+  },
+  {
+    "testTitle": "Deve validar erro ao registrar trabalho sem disciplina",
+    "dadosAluno": {
+      "nome": "Ana Pereira",
+      "email": "ana.pereira@example.com",
+      "matricula": "202401004",
+      "senha": "senha000"
+    },
+    "disciplinaIdMatricula": "disciplina-matematica",
+    "dadosTrabalho": {
+      "titulo": "Relatório de Experimento",
+      "descricao": "Sem disciplina"
+    },
+    "statusCodeEsperado": 400,
+    "respostaTrabalho": {
+      "error": "Os campos \"disciplinaId\" e \"titulo\" são obrigatórios."
+    }
+  },
+  {
+    "testTitle": "Deve validar erro ao registrar trabalho com disciplina inexistente",
+    "dadosAluno": {
+      "nome": "Carlos Silva",
+      "email": "carlos.silva@example.com",
+      "matricula": "202401003",
+      "senha": "senha789"
+    },
+    "disciplinaIdMatricula": "disciplina-historia",
+    "dadosTrabalho": {
+      "disciplinaId": "disciplina-inexistente",
+      "titulo": "Experimento",
+      "descricao": "Teste com disciplina inválida"
+    },
+    "statusCodeEsperado": 404,
+    "respostaTrabalho": {
+      "error": "Disciplina com id \"disciplina-inexistente\" não encontrada."
+    }
+  },
+  {
+    "testTitle": "Deve validar erro ao tentar entregar trabalho para uma disciplina não matriculada",
+    "dadosAluno": {
+      "nome": "Pedro Costa",
+      "email": "pedro.costa@example.com",
+      "matricula": "202401005",
+      "senha": "senha111"
+    },
+    "disciplinaIdMatricula": "disciplina-historia",
+    "dadosTrabalho": {
+      "disciplinaId": "disciplina-programacao-web",
+      "titulo": "Projeto Web",
+      "descricao": "Projeto sem estar matriculado nesta disciplina"
+    },
+    "statusCodeEsperado": 409,
+    "respostaTrabalho": {
+      "error": "O aluno não está matriculado nesta disciplina."
+    }
+  }
+]

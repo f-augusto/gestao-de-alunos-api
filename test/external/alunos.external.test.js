@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import { getToken } from '../helpers/auth.js';
+import { randomUUID } from 'crypto';
 
 
 describe('Login', () => {
@@ -29,22 +30,23 @@ describe('Login', () => {
     });
 
     it('deve cadastrar um aluno quando ele informa dados válidos', async () => {
+        const uuid = randomUUID().slice(0, 8);
         const cadastroAlunoResposta = await request('http://localhost:3000')
             .post('/api/admin/alunos')
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`)
             .send({
                 nome: 'Julio de Lima',
-                email: 'julio.lima@example.com',
-                matricula: '2026-0001',
+                email: `julio.lima.${uuid}@example.com`,
+                matricula: `2026-0001-${uuid}`,
                 senha: '123456'
             });
 
         // Validar que ele foi cadastrado
         expect(cadastroAlunoResposta.status).to.equal(201);
         expect(cadastroAlunoResposta.body.nome).to.equal('Julio de Lima');
-        expect(cadastroAlunoResposta.body.email).to.equal('julio.lima@example.com');
-        expect(cadastroAlunoResposta.body.matricula).to.equal('2026-0001');
+        expect(cadastroAlunoResposta.body.email).to.equal(`julio.lima.${uuid}@example.com`);
+        expect(cadastroAlunoResposta.body.matricula).to.equal(`2026-0001-${uuid}`);
 
     });
 });

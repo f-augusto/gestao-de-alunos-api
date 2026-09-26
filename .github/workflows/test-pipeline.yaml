@@ -1,0 +1,37 @@
+name: Pipeline de Testes de API
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [testes-de-api]
+
+jobs:
+  testes-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Criar arquivo .env
+        run: |
+          echo "BASE_URL=${{ secrets.BASE_URL || 'http://localhost:3000' }}" > .env
+          echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+          echo "ADMIN_SENHA=${{ secrets.ADMIN_SENHA }}" >> .env
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Iniciar servidor backend
+        run: npm start &
+
+      - name: Aguardar servidor estar pronto
+        run: npx wait-on http://localhost:3000 --timeout 30000
+
+      - name: Executar testes
+        run: npm test
