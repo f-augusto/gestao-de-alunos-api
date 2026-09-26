@@ -34,7 +34,7 @@ jobs:
         run: npx wait-on http://localhost:3000 --timeout 30000
 
       - name: Executar testes
-        run: npm test -- --reporter json > test-results.json || true
+        run: npm test -- --reporter json > test-results.json 2>&1
 
       - name: Publicar resultados de testes
         uses: dorny/test-reporter@v1
@@ -43,4 +43,4 @@ jobs:
           name: Test Results
           path: test-results.json
           reporter: mocha-json
-          fail-on-error: true
+          fail-on-error: false
